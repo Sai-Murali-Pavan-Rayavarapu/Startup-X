@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+coverage/
+
+.env
+.env.*
+!.env.example
+
+*.log
+.DS_Store
+
+# Never commit local Google credentials or exported service-account keys.
+application_default_credentials.json
+*service-account*.json
+gcloud-credentials*.json
