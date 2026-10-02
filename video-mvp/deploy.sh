@@ -10,8 +10,9 @@ ACCOUNT="navura-video-mvp@${PROJECT}.iam.gserviceaccount.com"
 BUCKET="${PROJECT}-video-mvp"
 SECRET="navura-video-mvp-token"
 
-test -n "${NAVURA_PIPELINE_TOKEN:-}" || { echo "The private video token environment variable is missing." >&2; exit 1; }
 command -v gcloud >/dev/null || { echo "Run this bundle in Google Cloud Shell." >&2; exit 1; }
+command -v openssl >/dev/null || { echo "OpenSSL is needed to create a service token." >&2; exit 1; }
+NAVURA_PIPELINE_TOKEN="${NAVURA_PIPELINE_TOKEN:-$(openssl rand -hex 32)}"
 
 gcloud services enable --project="$PROJECT" \
   run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com \
@@ -52,4 +53,5 @@ URL="$(gcloud run services describe "$SERVICE" --project="$PROJECT" \
   --region="$REGION" --format='value(status.url)')"
 test -n "$URL" || { echo "Deployment has no service URL." >&2; exit 1; }
 echo "NAVURA_VIDEO_SERVICE_URL=$URL"
-echo "Share this URL with Codex to connect the live Stage 5 page."
+echo "NAVURA_PIPELINE_TOKEN=$NAVURA_PIPELINE_TOKEN"
+echo "Share these two values with Codex to connect the private Stage 5 page. This token controls only the Navura video service."
