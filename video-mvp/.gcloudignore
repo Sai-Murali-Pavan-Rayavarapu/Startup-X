@@ -1,0 +1,4 @@
+deploy.sh
+.gcloudignore
+__pycache__/
+*.pyc
